@@ -10,5 +10,6 @@
 # 使用方式
 如下地址为依赖包仓库地址
 https://central.sonatype.com/namespace/io.github.baichangda
+
 例如引用gb32960解析
 https://central.sonatype.com/artifact/io.github.baichangda/parser-protocol-gb32960
