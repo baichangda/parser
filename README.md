@@ -17,6 +17,6 @@ https://central.sonatype.com/artifact/io.github.baichangda/parser-protocol-gb329
 通过gradle方式引入
 
 `
-implementation group: 'io.github.baichangda', name: 'parser-protocol-gb32960', version: '1.1'
+implementation group: 'io.github.baichangda', name: 'parser-protocol-gb32960', version: 'xxx'
 `
 
