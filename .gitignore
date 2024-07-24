@@ -4,3 +4,4 @@ build
 ### Mac OS ###
 .DS_Store
 *.class
+gradle-bcd.properties
