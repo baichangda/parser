@@ -9,13 +9,12 @@ buildscript {
     }
 }
 
-plugins{
+plugins {
     id 'java-library'
     id 'java'
     id 'idea'
     id 'com.vanniktech.maven.publish' version '0.29.0' apply false
 }
-
 
 
 subprojects {
@@ -25,7 +24,12 @@ subprojects {
     apply plugin: 'java-library'
     apply plugin: 'java'
     apply plugin: 'idea'
-    apply plugin: 'com.vanniktech.maven.publish'
+
+    //定义排除某些项目、不发布
+    var notPublishProjects = Set.of('parser-protocol-immotors')
+    if (!notPublishProjects.contains(it.name)) {
+        apply plugin: 'com.vanniktech.maven.publish'
+    }
 
     java {
         sourceCompatibility = JavaVersion.VERSION_17
