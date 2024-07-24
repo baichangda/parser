@@ -1,7 +1,6 @@
 package cn.bcd.parser.util;
 
 import cn.bcd.parser.exception.ParseException;
-//import cn.bcd.parser.impl.immotors.Evt_0001;
 
 import java.io.BufferedReader;
 import java.io.IOException;

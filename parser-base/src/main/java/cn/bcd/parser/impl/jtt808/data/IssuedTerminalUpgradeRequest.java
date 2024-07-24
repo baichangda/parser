@@ -1,7 +1,10 @@
 package cn.bcd.parser.impl.jtt808.data;
 
 
-import cn.bcd.parser.anno.*;
+import cn.bcd.parser.anno.F_num;
+import cn.bcd.parser.anno.F_num_array;
+import cn.bcd.parser.anno.F_string;
+import cn.bcd.parser.anno.NumType;
 
 public class IssuedTerminalUpgradeRequest implements PacketBody {
     //升级类型

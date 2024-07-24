@@ -1,2 +1,6 @@
 rootProject.name = 'parser'
+include 'protocol-jtt808'
+include 'protocol-gb32960'
+include 'protocol-immotors'
+include 'parser-base'
 

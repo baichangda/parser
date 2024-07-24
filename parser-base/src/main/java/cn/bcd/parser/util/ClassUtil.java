@@ -1,8 +1,6 @@
 package cn.bcd.parser.util;
 
 
-import cn.bcd.parser.exception.ParseException;
-
 import java.io.File;
 import java.io.IOException;
 import java.lang.reflect.Field;
