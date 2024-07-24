@@ -42,6 +42,13 @@ subprojects {
         mavenCentral()
     }
 
+    dependencies {
+        // https://mvnrepository.com/artifact/org.junit.jupiter/junit-jupiter-engine
+        testImplementation group: 'org.junit.jupiter', name: 'junit-jupiter-engine', version: '5.11.0-M2'
+        // https://mvnrepository.com/artifact/org.apache.logging.log4j/log4j-slf4j2-impl
+        testImplementation group: 'org.apache.logging.log4j', name: 'log4j-slf4j2-impl', version: '2.23.1'
+    }
+
     //下载源码和文档
     //gradle cleanIdea idea
     idea {
