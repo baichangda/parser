@@ -1,0 +1,11 @@
+package cn.bcd.parser.protocol.gb32960.data;
+
+import cn.bcd.parser.base.anno.C_impl;
+import cn.bcd.parser.base.anno.F_num_array;
+import cn.bcd.parser.base.anno.NumType;
+
+@C_impl(value = Integer.MAX_VALUE)
+public class ResponseData implements PacketData {
+    @F_num_array(singleType = NumType.uint8,lenExpr = "A")
+    public byte[] content;
+}
