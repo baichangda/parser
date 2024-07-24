@@ -20,7 +20,7 @@ plugins {
 
 subprojects {
     group 'cn.bcd'
-    version '1.1'
+    version '1.2'
 
     apply plugin: 'java-library'
     apply plugin: 'java'
@@ -37,8 +37,8 @@ subprojects {
                     name = "GitHubPackages"
                     url = "https://maven.pkg.github.com/baichangda/parser"
                     credentials {
-                        username = "${github.username}"
-                        password = "${github.password}"
+                        username = getProperty("github.username")
+                        password = getProperty("github.password")
                     }
                 }
             }
