@@ -13,3 +13,10 @@ https://central.sonatype.com/namespace/io.github.baichangda
 
 例如引用gb32960解析
 https://central.sonatype.com/artifact/io.github.baichangda/parser-protocol-gb32960
+
+通过gradle方式引入
+
+`
+implementation group: 'io.github.baichangda', name: 'parser-protocol-gb32960', version: '1.1'
+`
+
