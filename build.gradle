@@ -20,7 +20,7 @@ plugins {
 
 subprojects {
     group 'cn.bcd'
-    version '1.2'
+    version '1.3'
 
     apply plugin: 'java-library'
     apply plugin: 'java'
@@ -42,6 +42,15 @@ subprojects {
                     }
                 }
             }
+        }
+    }
+
+    //所有协议实现的包依赖管理
+    if(it.name.startsWith('parser-protocol-')){
+        dependencies {
+            api(project(":parser-base"))
+            // https://mvnrepository.com/artifact/com.fasterxml.jackson.core/jackson-databind
+            api group: 'com.fasterxml.jackson.core', name: 'jackson-annotations', version: "2.17.2"
         }
     }
 
