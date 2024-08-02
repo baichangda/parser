@@ -35,7 +35,8 @@ public class ParserTest {
 
     @Test
     public void test_performance() {
-//        Parser.enablePrintBuildLog();
+        Parser.disableByteBufCheck();
+        Parser.enablePrintBuildLog();
         Parser.enableGenerateClassFile();
 //        Parser.withDefaultLogCollector_parse();
 //        Parser.withDefaultLogCollector_deParse();

@@ -10,6 +10,7 @@ import cn.bcd.parser.base.util.BitBuf_reader_log;
 import cn.bcd.parser.base.util.BitBuf_writer_log;
 import cn.bcd.parser.base.util.LogUtil;
 import cn.bcd.parser.base.util.ParseUtil;
+import io.netty.buffer.AbstractByteBuf;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import javassist.*;
@@ -66,7 +67,6 @@ import java.util.Map;
  * {@link ParseUtil#needLog(BuilderContext)}
  */
 public class Parser {
-
     private final static Logger logger = LoggerFactory.getLogger(Parser.class);
 
     public final static Map<Class<? extends Annotation>, FieldBuilder> anno_fieldBuilder;
@@ -92,6 +92,18 @@ public class Parser {
      * 是否打印javassist生成class的过程日志
      */
     private static boolean printBuildLog = false;
+
+    /**
+     *  禁用ByteBuf检查
+     *  这样做会使性能提高10%~20%
+     *  原因是在读取{@link ByteBuf}时候会进行如下两个检查
+     *  {@link AbstractByteBuf#checkAccessible} 可访问检查
+     *  {@link AbstractByteBuf#checkBounds} 边界检查
+     */
+    public static void disableByteBufCheck() {
+        System.setProperty("io.netty.buffer.checkBounds", "false");
+        System.setProperty("io.netty.buffer.checkAccessible", "false");
+    }
 
     public static void withDefaultLogCollector_parse() {
         logCollector_parse = new LogCollector_parse() {
@@ -180,6 +192,7 @@ public class Parser {
                     }
                 }
             }
+
             @Override
             public void collect_field(Class<?> clazz, String fieldName, int type, Object... args) {
                 try {
