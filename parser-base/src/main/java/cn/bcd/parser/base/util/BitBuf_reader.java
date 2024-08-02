@@ -57,16 +57,50 @@ public class BitBuf_reader {
             };
             ByteBuf bb2 = Unpooled.wrappedBuffer(source2);
             BitBuf_reader bitBuf2 = new BitBuf_reader(bb2);
-            final long res1 = bitBuf2.read(3, true, true);
-            final long res2 = bitBuf2.read(8, true, true);
-            bitBuf2.skip(3);
-            final long res3 = bitBuf2.read(9, false, false);
-            System.out.println(res1);
-            System.out.println(res2);
-            System.out.println(res3);
+            long l1 = bitBuf2.read_1_8(3);
+            long l2 = bitBuf2.read_1_8(3);
+            long l3 = bitBuf2.read_1_8(3);
+            System.out.println(l1);
+            System.out.println(l2);
+            System.out.println(l3);
+//            final long res1 = bitBuf2.read(3, true, true);
+//            final long res2 = bitBuf2.read(8, true, true);
+//            bitBuf2.skip(3);
+//            final long res3 = bitBuf2.read(9, false, false);
+//            System.out.println(res1);
+//            System.out.println(res2);
+//            System.out.println(res3);
         }
         System.out.println(System.currentTimeMillis() - t1);
 
+    }
+
+    public int read_1_8(int bit) {
+        final ByteBuf byteBuf = this.byteBuf;
+        final int bitOffset = this.bitOffset;
+        byte b;
+        if (bitOffset == 0) {
+            b = byteBuf.readByte();
+        } else {
+            b = this.b;
+        }
+        final int temp = bit + bitOffset;
+        if (temp < 8) {
+            this.bitOffset = temp;
+            if (bitOffset == 0) {
+                this.b = b;
+            }
+            return (b >>> (8 - temp)) & ((1 << bit) - 1);
+        } else if (temp > 8) {
+            byte nextB = byteBuf.readByte();
+            int res = (((b << 8) | (nextB & 0xff)) >>> (16 - temp)) & ((1 << bit) - 1);
+            this.b = nextB;
+            this.bitOffset = temp - 8;
+            return res;
+        } else {
+            this.bitOffset = 0;
+            return b & ((1 << bit) - 1);
+        }
     }
 
     public long read(int bit, boolean bigEndian, boolean unsigned) {

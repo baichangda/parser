@@ -94,7 +94,6 @@ public final class BitBuf_reader_log extends BitBuf_reader {
 
         if (!unsigned && ((cRight >> (bit - 1)) & 0x01) == 1) {
             log.val3 = cRight | (-1L << bit);
-            log.signed3 = true;
         } else {
             log.val3 = cRight & ((0x01L << bit) - 1);
         }
@@ -251,8 +250,6 @@ public final class BitBuf_reader_log extends BitBuf_reader {
         public long val1;
         //处理大小端之后的值
         public long val2;
-        //是否有符号
-        public boolean signed3;
         //最终解析值
         public long val3;
 
@@ -262,12 +259,8 @@ public final class BitBuf_reader_log extends BitBuf_reader {
             this.unsigned = unsigned;
         }
 
-        public final String getLogBit(long l, boolean signed) {
-            if (signed) {
-                return "-" + Strings.padStart(Long.toBinaryString(-l), bit, '0');
-            } else {
-                return Strings.padStart(Long.toBinaryString(l), bit, '0');
-            }
+        public final String getLogBit(long l) {
+            return Strings.padStart(Long.toBinaryString(l), bit, '0');
         }
 
         @Override
@@ -277,7 +270,7 @@ public final class BitBuf_reader_log extends BitBuf_reader {
                     bitStart, bitEnd,
                     bigEndian ? "yes" : "no",
                     unsigned ? "yes" : "no",
-                    getLogBit(val1, false), getLogBit(val2, false), getLogBit(val3, signed3),
+                    getLogBit(val1), getLogBit(val2), getLogBit(val3),
                     val1, val2, val3);
         }
     }

@@ -25,17 +25,18 @@ public final class BitBuf_writer_log extends BitBuf_writer {
 
             final ByteBuf bb = Unpooled.buffer();
             final BitBuf_writer_log bitBufWriter = new BitBuf_writer_log(bb);
-            bitBufWriter.write(4, 3, true, true);
-            bitBufWriter.write(0, 3, true, true);
+            bitBufWriter.write(4, 3, true);
+            bitBufWriter.write(0, 3, true);
             bitBufWriter.skip(3);
-            bitBufWriter.write(-217, 9, false, false);
+            bitBufWriter.write(-217, 9, false);
             bitBufWriter.finish();
 //            System.out.println(ByteBufUtil.hexDump(bb));
         }
         System.out.println(System.currentTimeMillis() - t1);
     }
 
-    public void write(long l, int bit, boolean bigEndian, boolean unsigned) {
+    public void write(long l, int bit, boolean bigEndian) {
+        l = l & ((0x01L << bit) - 1);
         final ByteBuf byteBuf = this.byteBuf;
         int bitOffset = this.bitOffset;
         byte b = this.b;
@@ -49,22 +50,15 @@ public final class BitBuf_writer_log extends BitBuf_writer {
             byteLen = (temp >> 3) + 1;
         }
 
-        final WriteLog log = new WriteLog(byteLen, bitOffset, bit, bigEndian, unsigned);
+        final WriteLog log = new WriteLog(byteLen, bitOffset, bit, bigEndian);
 
         log.val1 = l;
-
-        if (!unsigned && l < 0) {
-            log.signed1 = true;
-            l = l & ((0x01L << bit) - 1);
-        }
-
-        log.val2 = l;
 
         if (!bigEndian) {
             l = Long.reverse(l) >>> (64 - bit);
         }
 
-        log.val3 = l;
+        log.val2 = l;
 
         final long newL;
         if (finalBitOffset == 0) {
@@ -72,25 +66,21 @@ public final class BitBuf_writer_log extends BitBuf_writer {
         } else {
             newL = l << (8 - finalBitOffset);
         }
-        if (bitOffset == 0) {
-            b = (byte) (newL >> ((byteLen - 1) << 3));
-        } else {
-            b |= (byte) (newL >> ((byteLen - 1) << 3));
-        }
+        b |= (byte) (newL >> ((byteLen - 1) << 3));
         log.bytes[0] = b;
         for (int i = 1; i < byteLen; i++) {
             byteBuf.writeByte(b);
             b = (byte) (newL >> ((byteLen - i - 1) << 3));
             log.bytes[i] = b;
         }
-        bitOffset = temp & 7;
-        if (bitOffset == 0) {
+        if (finalBitOffset == 0) {
             byteBuf.writeByte(b);
+            this.bitOffset = 0;
+            this.b = 0;
+        } else {
+            this.bitOffset = finalBitOffset;
+            this.b = b;
         }
-
-        this.bitOffset = bitOffset;
-        this.b = b;
-
         logs.add(log);
     }
 
@@ -226,33 +216,24 @@ public final class BitBuf_writer_log extends BitBuf_writer {
 
     public static class WriteLog extends Log {
         public final boolean bigEndian;
-        public final boolean unsigned;
         public long val1;
-        public boolean signed1;
         public long val2;
-        public long val3;
 
-        public WriteLog(int byteLen, int bitStart, int bit, boolean bigEndian, boolean unsigned) {
+        public WriteLog(int byteLen, int bitStart, int bit, boolean bigEndian) {
             super(byteLen, bitStart, bit);
             this.bigEndian = bigEndian;
-            this.unsigned = unsigned;
         }
 
-        public final String getLogBit(long l, boolean signed) {
-            if (signed) {
-                return "-" + Strings.padStart(Long.toBinaryString(-l), bit, '0');
-            } else {
-                return Strings.padStart(Long.toBinaryString(l), bit, '0');
-            }
+        public final String getLogBit(long l) {
+            return Strings.padStart(Long.toBinaryString(l), bit, '0');
         }
 
         @Override
         public String msg() {
-            return StringUtil.format("write bit_unsigned[{}] bit_bigEndian[{}] bit_val[{}->{}->{}] bit_binary[{}->{}->{}] bit_hex[{}] bit_pos[{}-{}]",
-                    unsigned ? "yes" : "no",
+            return StringUtil.format("write bit_bigEndian[{}] bit_val[{}->{}] bit_binary[{}->{}] bit_hex[{}] bit_pos[{}-{}]",
                     bigEndian ? "yes" : "no",
-                    val1, val2, val3,
-                    getLogBit(val1, signed1), getLogBit(val2, false), getLogBit(val3, false),
+                    val1, val2,
+                    getLogBit(val1), getLogBit(val2),
                     getLogHex().toUpperCase(),
                     bitStart, bitEnd);
         }

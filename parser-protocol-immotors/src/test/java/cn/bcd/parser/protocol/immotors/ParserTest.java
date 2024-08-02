@@ -1,8 +1,7 @@
-package cn.bcd.parser.protocol.gb32960;
+package cn.bcd.parser.protocol.immotors;
 
 import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.util.PerformanceUtil;
-import cn.bcd.parser.protocol.immotors.Packet;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
 import io.netty.buffer.Unpooled;

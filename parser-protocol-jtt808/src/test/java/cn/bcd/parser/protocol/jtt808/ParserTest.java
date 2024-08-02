@@ -1,4 +1,4 @@
-package cn.bcd.parser.protocol.gb32960;
+package cn.bcd.parser.protocol.jtt808;
 
 import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.processor.Processor;

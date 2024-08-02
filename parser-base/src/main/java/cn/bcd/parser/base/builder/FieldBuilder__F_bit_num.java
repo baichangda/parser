@@ -1,5 +1,6 @@
 package cn.bcd.parser.base.builder;
 
+import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.anno.BitRemainingMode;
 import cn.bcd.parser.base.anno.F_bit_num;
 import cn.bcd.parser.base.anno.F_bit_num_array;
@@ -11,6 +12,8 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public class FieldBuilder__F_bit_num extends FieldBuilder {
+
+    public static boolean optimization = true;
 
     private boolean finish(BuilderContext context) {
         List<Field> fieldList = context.class_fieldList;
@@ -74,8 +77,11 @@ public class FieldBuilder__F_bit_num extends FieldBuilder {
             throw ParseException.get("class[{}] field[{}] anno[{}] len[{}] must in range [1,64]", field.getDeclaringClass().getName(), field.getName(), annoClass.getName(), len);
         }
 
-
-        ParseUtil.append(body, "final {} {}=({}){}.read({},{},{});\n", sourceValTypeName, varNameField, sourceValTypeName, varNameBitBuf, len, bigEndian, unsigned);
+        if (optimization && bigEndian && unsigned && Parser.logCollector_parse == null && len <= 8) {
+            ParseUtil.append(body, "final {} {}=({}){}.read_1_8({});\n", sourceValTypeName, varNameField, sourceValTypeName, varNameBitBuf, len);
+        } else {
+            ParseUtil.append(body, "final {} {}=({}){}.read({},{},{});\n", sourceValTypeName, varNameField, sourceValTypeName, varNameBitBuf, len, bigEndian, unsigned);
+        }
 
         String valCode = ParseUtil.replaceValExprToCode(anno.valExpr(), varNameField);
         if (fieldTypeClass.isEnum()) {
@@ -166,7 +172,12 @@ public class FieldBuilder__F_bit_num extends FieldBuilder {
         if (len < 1 || len > 64) {
             throw ParseException.get("class[{}] field[{}] anno[{}] len[{}] must in range [1,64]", field.getDeclaringClass().getName(), field.getName(), annoClass.getName(), len);
         }
-        ParseUtil.append(body, "{}.write((long)({}),{},{},{});\n", varNameBitBuf, valCode, len, bigEndian, unsigned);
+
+        if (optimization && bigEndian && Parser.logCollector_parse == null && len <= 8) {
+            ParseUtil.append(body, "{}.write_1_8((int)({}),{});\n", varNameBitBuf, valCode, len);
+        } else {
+            ParseUtil.append(body, "{}.write((long)({}),{},{});\n", varNameBitBuf, valCode, len, bigEndian);
+        }
 
         if (skipAfter > 0) {
             ParseUtil.append(body, "{}.skip({});\n", varNameBitBuf, skipAfter);
