@@ -48,41 +48,14 @@ public class BitBuf_writer {
 
             final ByteBuf bb = Unpooled.buffer();
             final BitBuf_writer bitBufWriter = new BitBuf_writer(bb);
-//            bitBufWriter.write(4, 3, true, true);
-//            bitBufWriter.write(0, 3, true, true);
-//            bitBufWriter.skip(3);
-//            bitBufWriter.write(-217, 9, false, false);
-//            bitBufWriter.finish();
-            bitBufWriter.write_1_8(4, 3);
-            bitBufWriter.write_1_8(0, 3);
-            bitBufWriter.write_1_8(2, 3);
-            bitBufWriter.write_1_8(0b111, 3);
-            bitBufWriter.write_1_8(0b0010, 4);
-            bitBufWriter.write_1_8(0b01000000, 8);
+            bitBufWriter.write(4, 3, true);
+            bitBufWriter.write(0, 3, true);
+            bitBufWriter.skip(3);
+            bitBufWriter.write(-217, 9, false);
+            bitBufWriter.finish();
             System.out.println(ByteBufUtil.hexDump(bb));
         }
         System.out.println(System.currentTimeMillis() - t1);
-    }
-
-    public void write_1_8(int v, int bit) {
-        v = v & ((1 << bit) - 1);
-        final ByteBuf byteBuf = this.byteBuf;
-        int bitOffset = this.bitOffset;
-        byte b = this.b;
-        final int temp = bit + bitOffset;
-        if (temp < 8) {
-            this.b = (byte) (b | (v << (8 - temp)));
-            this.bitOffset = temp;
-        } else if (temp > 8) {
-            int i = temp - 8;
-            byteBuf.writeByte(b | (v >>> i));
-            this.b = (byte) (v << (8 - i));
-            this.bitOffset = i;
-        } else {
-            byteBuf.writeByte(b | v);
-            this.b = 0;
-            this.bitOffset = 0;
-        }
     }
 
     public void write(long l, int bit, boolean bigEndian) {

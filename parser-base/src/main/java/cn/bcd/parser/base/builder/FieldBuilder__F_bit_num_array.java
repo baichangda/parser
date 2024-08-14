@@ -1,6 +1,5 @@
 package cn.bcd.parser.base.builder;
 
-import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.anno.BitRemainingMode;
 import cn.bcd.parser.base.anno.F_bit_num;
 import cn.bcd.parser.base.anno.F_bit_num_array;
@@ -12,8 +11,6 @@ import java.lang.reflect.Field;
 import java.util.List;
 
 public class FieldBuilder__F_bit_num_array extends FieldBuilder {
-
-    public static boolean optimization = true;
 
     private boolean finish(BuilderContext context) {
         List<Field> fieldList = context.class_fieldList;
@@ -86,11 +83,7 @@ public class FieldBuilder__F_bit_num_array extends FieldBuilder {
 
         ParseUtil.append(body, "final {}[] {}=new {}[{}];\n", arrayElementTypeName, arrVarName, arrayElementTypeName, arrLenRes);
         ParseUtil.append(body, "for(int i=0;i<{}.length;i++){\n", arrVarName);
-        if (optimization && bigEndian && unsigned && Parser.logCollector_parse == null && singleLen <= 8) {
-            ParseUtil.append(body, "final {} {}=({}){}.read_1_8({});\n", arrayElementTypeName, varNameArrayElement, arrayElementTypeName, varNameBitBuf, singleLen);
-        } else {
-            ParseUtil.append(body, "final {} {}=({}){}.read({},{},{});\n", arrayElementTypeName, varNameArrayElement, arrayElementTypeName, varNameBitBuf, singleLen, bigEndian, unsigned);
-        }
+        ParseUtil.append(body, "final {} {}=({}){}.read({},{},{});\n", arrayElementTypeName, varNameArrayElement, arrayElementTypeName, varNameBitBuf, singleLen, bigEndian, unsigned);
 
         if (singleSkip > 0) {
             ParseUtil.append(body, "{}.skip({});\n", varNameBitBuf, singleSkip);
@@ -149,11 +142,7 @@ public class FieldBuilder__F_bit_num_array extends FieldBuilder {
                 writeValCode = ParseUtil.replaceValExprToCode(RpnUtil.reverseExpr(anno.singleValExpr()), varNameFieldArr + "[i]");
             }
         }
-        if (optimization &&bigEndian && Parser.logCollector_parse == null && singleLen <= 8) {
-            ParseUtil.append(body, "{}.write_1_8((int)({}),{});\n", varNameBitBuf, writeValCode, singleLen);
-        } else {
-            ParseUtil.append(body, "{}.write((long)({}),{},{});\n", varNameBitBuf, writeValCode, singleLen, bigEndian);
-        }
+        ParseUtil.append(body, "{}.write((long)({}),{},{});\n", varNameBitBuf, writeValCode, singleLen, bigEndian);
         if (singleSkip > 0) {
             ParseUtil.append(body, "{}.skip({});\n", varNameBitBuf, singleSkip);
         }
