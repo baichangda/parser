@@ -53,7 +53,7 @@ public class FieldBuilder__F_bean extends FieldBuilder {
                 int[] value = c_impl.value();
                 List<Integer> filterValue = new ArrayList<>();
                 for (int i : value) {
-                    if (i == Integer.MAX_VALUE) {
+                    if (i == C_impl.Default) {
                         defaultClass = implClass;
                     } else {
                         filterValue.add(i);
@@ -150,7 +150,7 @@ public class FieldBuilder__F_bean extends FieldBuilder {
                 int[] value = c_impl.value();
                 List<Integer> filterValue = new ArrayList<>();
                 for (int i : value) {
-                    if (i == Integer.MAX_VALUE) {
+                    if (i == C_impl.Default) {
                         defaultClass = implClass;
                     } else {
                         filterValue.add(i);
