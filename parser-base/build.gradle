@@ -1,10 +1,10 @@
 dependencies {
     // https://mvnrepository.com/artifact/org.slf4j/slf4j-api
-    api group: 'org.slf4j', name: 'slf4j-api', version: '2.0.13'
+    api group: 'org.slf4j', name: 'slf4j-api', version: '2.0.16'
     // https://mvnrepository.com/artifact/com.google.guava/guava
-    api group: 'com.google.guava', name: 'guava', version: "33.2.1-jre"
+    api group: 'com.google.guava', name: 'guava', version: "33.3.0-jre"
     // https://mvnrepository.com/artifact/io.netty/netty-all
-    api group: 'io.netty', name: 'netty-buffer', version: "4.1.111.Final"
+    api group: 'io.netty', name: 'netty-buffer', version: "4.1.112.Final"
     // https://mvnrepository.com/artifact/org.javassist/javassist
     api group: 'org.javassist', name: 'javassist', version: "3.30.2-GA"
 }
