@@ -4,6 +4,7 @@ import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.anno.*;
 import cn.bcd.parser.base.processor.Processor;
 import io.netty.buffer.ByteBuf;
+import io.netty.buffer.Unpooled;
 
 
 public class Packet {
@@ -37,7 +38,57 @@ public class Packet {
     public static Packet read(ByteBuf data) {
         return processor.process(data);
     }
+
     public void write(ByteBuf data) {
         processor.deProcess(data, this);
+    }
+
+    /**
+     * 转换为{@link ByteBuf}
+     *
+     * @return
+     */
+    public ByteBuf toByteBuf() {
+        ByteBuf byteBuf = Unpooled.buffer();
+        write(byteBuf);
+        return byteBuf;
+    }
+
+    /**
+     * 转换为{@link ByteBuf}
+     * 修正数据单元长度
+     * 修正异或校验位
+     *
+     * @return
+     */
+    public ByteBuf toByteBuf_fix() {
+        ByteBuf byteBuf = toByteBuf();
+        fix_contentLength(byteBuf);
+        fix_code(byteBuf);
+        return byteBuf;
+    }
+
+    /**
+     * 修正数据单元长度
+     *
+     * @param data 只包含一条数据的数据包
+     */
+    public static void fix_contentLength(ByteBuf data) {
+        int actualLen = data.readableBytes() - 25;
+        data.setShort(22, actualLen);
+    }
+
+    /**
+     * 修正异或校验位
+     *
+     * @param data 只包含一条数据的数据包
+     */
+    public static void fix_code(ByteBuf data) {
+        byte xor = 0;
+        int codeIndex = data.readableBytes() - 1;
+        for (int i = 0; i < codeIndex; i++) {
+            xor ^= data.getByte(i);
+        }
+        data.setByte(codeIndex, xor);
     }
 }
