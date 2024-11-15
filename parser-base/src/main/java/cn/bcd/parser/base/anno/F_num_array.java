@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据是常规的数字的数据类型的数组、见{@link NumType}
+ *
  * 适用如下字段类型
  * byte[]、short[]、int[]、long[]、float[]、double[]、enum[]
  * 数组长度=总字节数/singleLen

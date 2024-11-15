@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于和其他字段一起配合使用、不能单独使用
+ *
  * 适用于任何字段
  * 跳过数个字节
  * 可以配合其他注解一起使用

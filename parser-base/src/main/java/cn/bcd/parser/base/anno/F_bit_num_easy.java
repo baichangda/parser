@@ -6,6 +6,10 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据是用bit位进行单位解析的情况
+ * 且连续bit字段总长度不超过32位
+ * 此性能较高
+ *
  * 适用如下字段类型
  * byte、short、int、long、float、double、枚举类
  *

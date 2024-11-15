@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据是6字节、表示日期的方式是bcd编码格式
+ *
  * 适用于如下类型
  * {@link java.util.Date}
  * {@link java.time.Instant}

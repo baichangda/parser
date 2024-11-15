@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据是字节数组代表字符串的情况
+ *
  * 用于如下类型字段
  * String
  * 反解析中

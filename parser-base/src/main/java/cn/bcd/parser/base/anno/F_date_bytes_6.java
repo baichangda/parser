@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据是6个字节分别表示 年、月、日、时、分、秒
+ *
  * 适用于如下类型
  * {@link java.util.Date}
  * {@link java.time.Instant}

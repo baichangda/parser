@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据是bit位代表的数字
+ *
  * 适用如下字段类型
  * byte、short、int、long、float、double、枚举类
  * <p>

@@ -6,6 +6,9 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于解析的原始数据表示为时间戳
+ * 毫秒、秒都可以
+ *
  * 适用于如下类型
  * {@link java.util.Date}
  * {@link java.time.Instant}

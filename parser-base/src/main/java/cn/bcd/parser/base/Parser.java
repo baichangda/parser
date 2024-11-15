@@ -32,11 +32,11 @@ import java.util.Map;
  * 解析器
  * 配合注解完成解析工作
  * 会扫描当前类和其父类的所有字段
- * 会忽视如下字段
- * 1、没有被{@link Parser#anno_fieldBuilder}中注解标注的字段
- * 2、static或者final修饰的字段
- * 3、非public字段
  * 解析字段的顺序为 父类字段在子类之前
+ * 字段必须符合如下规则
+ * 1、public、非final、非static
+ * 2、必须标注了如下注解之一
+ * {@link cn.bcd.parser.base.anno}下 F_ 开头的注解(F_skip除外)
  *
  * <p>
  * 工作原理:

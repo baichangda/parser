@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据为结构体数组
+ *
  * 适用于实体类集合字段、支持如下类型
  * T[] 数组
  * List<T> 集合、默认实例是ArrayList类型

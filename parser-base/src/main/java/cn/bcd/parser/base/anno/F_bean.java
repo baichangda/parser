@@ -6,6 +6,8 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 /**
+ * 用于原始数据为结构体
+ *
  * 适用于
  * 实体类字段
  * 接口类字段、必须定义{@link #implClassExpr()}属性、且子类配合使用{@link C_impl}标注
