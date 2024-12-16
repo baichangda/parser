@@ -178,5 +178,8 @@ public class Evt_D006 extends Evt_4_x {
     public byte EnSpdSts;
     @F_bit_num(len = 12, valExpr = "x*16")
     public int FuelCsump;
-
+    @F_bit_num(len = 1)
+    public byte EnRunA;
+    @F_bit_num(len = 1)
+    public byte AvgFuelCsumpV;
 }

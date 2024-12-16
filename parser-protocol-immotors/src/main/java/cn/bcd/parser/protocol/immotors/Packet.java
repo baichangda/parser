@@ -24,6 +24,8 @@ public class Packet {
     public Evt_000D evt_000D;
     public Evt_000E evt_000E;
     public Evt_000F evt_000F;
+    public Evt_0010 evt_0010;
+    public Evt_0011 evt_0011;
     public Evt_0800 evt_0800;
     public Evt_0801 evt_0801;
     public Evt_0802 evt_0802;
@@ -52,6 +54,7 @@ public class Packet {
     public Evt_D01C evt_D01C;
     public Evt_D01D evt_D01D;
     public Evt_D01F evt_D01F;
+    public Evt_D020 evt_D020;
     public Evt_2_6_unknown[] evt_2_6_unknown;
     public Evt_4_x_unknown[] evt_4_x_unknown;
     public Evt_FFFF evt_FFFF;
@@ -70,6 +73,8 @@ public class Packet {
     final static Processor<Evt_000D> processor_Evt_000D = Parser.getProcessor(Evt_000D.class);
     final static Processor<Evt_000E> processor_Evt_000E = Parser.getProcessor(Evt_000E.class);
     final static Processor<Evt_000F> processor_Evt_000F = Parser.getProcessor(Evt_000F.class);
+    final static Processor<Evt_0010> processor_Evt_0010 = Parser.getProcessor(Evt_0010.class);
+    final static Processor<Evt_0011> processor_Evt_0011 = Parser.getProcessor(Evt_0011.class);
     final static Processor<Evt_0800> processor_Evt_0800 = Parser.getProcessor(Evt_0800.class);
     final static Processor<Evt_0801> processor_Evt_0801 = Parser.getProcessor(Evt_0801.class);
     final static Processor<Evt_0802> processor_Evt_0802 = Parser.getProcessor(Evt_0802.class);
@@ -95,6 +100,7 @@ public class Packet {
     final static Processor<Evt_D01C> processor_Evt_D01C = Parser.getProcessor(Evt_D01C.class);
     final static Processor<Evt_D01D> processor_Evt_D01D = Parser.getProcessor(Evt_D01D.class);
     final static Processor<Evt_D01F> processor_Evt_D01F = Parser.getProcessor(Evt_D01F.class);
+    final static Processor<Evt_D020> processor_Evt_D020 = Parser.getProcessor(Evt_D020.class);
     final static Processor<Evt_FFFF> processor_Evt_FFFF = Parser.getProcessor(Evt_FFFF.class);
     final static Processor<Evt_2_6_unknown> processor_Evt_2_6_unknown = Parser.getProcessor(Evt_2_6_unknown.class);
     final static Processor<Evt_4_x_unknown> processor_Evt_4_x_unknown = Parser.getProcessor(Evt_4_x_unknown.class);
@@ -126,6 +132,8 @@ public class Packet {
                 case 0x000D -> packet.evt_000D = processor_Evt_000D.process(data);
                 case 0x000E -> packet.evt_000E = processor_Evt_000E.process(data);
                 case 0x000F -> packet.evt_000F = processor_Evt_000F.process(data);
+                case 0x0010 -> packet.evt_0010 = processor_Evt_0010.process(data);
+                case 0x0011 -> packet.evt_0011 = processor_Evt_0011.process(data);
                 case 0x0800 -> packet.evt_0800 = processor_Evt_0800.process(data);
                 case 0x0801 -> packet.evt_0801 = processor_Evt_0801.process(data);
                 case 0x0802 -> packet.evt_0802 = processor_Evt_0802.process(data);
@@ -154,6 +162,7 @@ public class Packet {
                 case 0xD01C -> packet.evt_D01C = processor_Evt_D01C.process(data);
                 case 0xD01D -> packet.evt_D01D = processor_Evt_D01D.process(data);
                 case 0xD01F -> packet.evt_D01F = processor_Evt_D01F.process(data);
+                case 0xD020 -> packet.evt_D020 = processor_Evt_D020.process(data);
                 case 0xFFFF -> packet.evt_FFFF = processor_Evt_FFFF.process(data);
                 default -> {
                     if (evtId >= 0x0001 && evtId <= 0xAFFF) {
@@ -219,6 +228,12 @@ public class Packet {
         }
         if (evt_000F != null) {
             processor_Evt_000F.deProcess(data, evt_000F);
+        }
+        if (evt_0010 != null) {
+            processor_Evt_0010.deProcess(data, evt_0010);
+        }
+        if (evt_0011 != null) {
+            processor_Evt_0011.deProcess(data, evt_0011);
         }
         if (evt_0800 != null) {
             processor_Evt_0800.deProcess(data, evt_0800);
@@ -303,6 +318,9 @@ public class Packet {
         }
         if (evt_D01F != null) {
             processor_Evt_D01F.deProcess(data, evt_D01F);
+        }
+        if (evt_D020 != null) {
+            processor_Evt_D020.deProcess(data, evt_D020);
         }
         if (evt_2_6_unknown != null) {
             for (Evt_2_6_unknown e : evt_2_6_unknown) {
