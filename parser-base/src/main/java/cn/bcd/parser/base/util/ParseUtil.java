@@ -3,6 +3,7 @@ package cn.bcd.parser.base.util;
 
 import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.anno.*;
+import cn.bcd.parser.base.anno.data.*;
 import cn.bcd.parser.base.builder.BuilderContext;
 import cn.bcd.parser.base.builder.FieldBuilder;
 import cn.bcd.parser.base.exception.ParseException;
@@ -52,6 +53,14 @@ public class ParseUtil {
 
     public static void notSupport_fieldType(BuilderContext context, Class<?> annoClass) {
         throw ParseException.get("class[{}] field[{}] anno[{}] not support", context.clazz.getName(), context.field.getName(), annoClass.getName());
+    }
+
+    public static void notSupport(BuilderContext context, String msg, Object... params) {
+        Object[] args = new Object[params.length + 2];
+        args[0] = context.clazz.getName();
+        args[1] = context.field.getName();
+        System.arraycopy(params, 0, args, 2, params.length);
+        throw ParseException.get("class[{}] field[{}] " + msg, args);
     }
 
     public static boolean bigEndian(BitOrder order, BitOrder parentOrder) {
@@ -444,15 +453,17 @@ public class ParseUtil {
         return ClassUtil.getAllFields(clazz).stream().filter(ParseUtil::needParse).collect(Collectors.toList());
     }
 
-    private static String getProcessorSuffix(ByteOrder byteOrder, BitOrder bitOrder) {
+    private static String getProcessorSuffix(ByteOrder byteOrder, BitOrder bitOrder, NumValGetter numValGetter) {
         return "_" + (byteOrder == ByteOrder.smallEndian ? 0 : 1)
                 + "_" + (bitOrder == BitOrder.smallEndian ? 0 : 1)
                 + "_" + (Parser.logCollector_parse == null ? 0 : 1)
-                + "_" + (Parser.logCollector_deParse == null ? 0 : 1);
+                + "_" + (Parser.logCollector_deParse == null ? 0 : 1)
+                + "_" + (numValGetter.index)
+                ;
     }
 
-    public static String getProcessorKey(Class<?> clazz, ByteOrder byteOrder, BitOrder bitOrder) {
-        return clazz.getName() + getProcessorSuffix(byteOrder, bitOrder);
+    public static String getProcessorKey(Class<?> clazz, ByteOrder byteOrder, BitOrder bitOrder, NumValGetter numValGetter) {
+        return clazz.getName() + getProcessorSuffix(byteOrder, bitOrder, numValGetter);
     }
 
 
@@ -461,13 +472,13 @@ public class ParseUtil {
      */
     private static int processorIndex = 0;
 
-    public static String getProcessorClassName(Class<?> clazz, ByteOrder byteOrder, BitOrder bitOrder) {
+    public static String getProcessorClassName(Class<?> clazz, ByteOrder byteOrder, BitOrder bitOrder, NumValGetter numValGetter) {
         String clazzName = Processor.class.getName();
         return clazzName.substring(0, clazzName.lastIndexOf("."))
                 + ".P_"
                 + (processorIndex++) + "_"
                 + clazz.getSimpleName()
-                + getProcessorSuffix(byteOrder, bitOrder);
+                + getProcessorSuffix(byteOrder, bitOrder, numValGetter);
     }
 
     public static Map<Class<? extends Annotation>, FieldBuilder> getAllFieldBuild() {
@@ -799,7 +810,7 @@ public class ParseUtil {
     }
 
     public static void appendPutGlobalVar(BuilderContext context, char var, String val) {
-        append(context.method_body, "{}.putGlobalVar({},(int){});\n", FieldBuilder.varNameProcessContext, getGlobalVarIndex(var), val);
+        append(context.method_body, "{}.putGlobalVar({},(int)({}));\n", FieldBuilder.varNameProcessContext, getGlobalVarIndex(var), val);
     }
 
     public static void appendGetGlobalVar(BuilderContext context, char var) {
@@ -813,6 +824,118 @@ public class ParseUtil {
 
     public static String getGlobalVarName(char var) {
         return "globalVar_" + var;
+    }
+
+    public static void appendNumValGetter_parse(BuilderContext context, NumType numType, String varNameRawVal, String okValCode) {
+        String varNameField = ParseUtil.getFieldVarName(context);
+        String varNameNumValType = varNameField + "_numValType";
+        String varNameNumValGetter = context.getNumValGetterVarName();
+        append(context.method_body, "final int {}={}.getType({}.{},{});\n",
+                varNameNumValType,
+                varNameNumValGetter,
+                NumType.class.getName(), numType.name(),
+                varNameRawVal);
+        Class<?> fieldType = context.field.getType();
+        String fieldName = context.field.getName();
+        String defaultValCode = getNumValDefaultValue(context);
+        append(context.method_body, """
+                        if({}==0){
+                            {}.{}=new {}(0,({})({}));
+                        }else{
+                            {}.{}=new {}({},{});
+                        }
+                        """,
+                varNameNumValType,
+                FieldBuilder.varNameInstance, fieldName, fieldType.getName(), getNumFieldValType(context).getName(), okValCode,
+                FieldBuilder.varNameInstance, fieldName, fieldType.getName(), varNameNumValType, defaultValCode);
+    }
+
+    public static String appendNumValGetter_deParse(BuilderContext context, NumType numType, String varNameVal, String okValCode) {
+        String varNameField = ParseUtil.getFieldVarName(context);
+        String varNameNumValGetter = context.getNumValGetterVarName();
+        String varNameNumValType = varNameField + "_numValType";
+        append(context.method_body, "final int {}={}.{}.type();\n",
+                varNameNumValType,
+                FieldBuilder.varNameInstance,
+                varNameField);
+        String funcSuffix = switch (numType) {
+            case uint8, int8, uint16, int16, uint24, int24, uint32, int32 -> "int";
+            case uint40, int40, uint48, int48, uint56, int56, uint64, int64 -> "long";
+            default -> null;
+        };
+        if (funcSuffix == null) {
+            notSupport(context, "numType[{}] not support", numType.name());
+        }
+
+        Class<?> numValType = getNumFieldValType(context);
+        append(context.method_body, "final {} {};\n", numValType.getName(), varNameVal);
+        append(context.method_body, """
+                        if({}==0){
+                            {}={};
+                        }else{
+                            {}={}.getVal_{}({}.{},{});
+                        }
+                        """,
+                varNameNumValType,
+                varNameVal, okValCode,
+                varNameVal, varNameNumValGetter, funcSuffix, NumType.class.getName(), numType.name(), varNameNumValType);
+        return varNameVal;
+    }
+
+    public static String getNumValDefaultValue(BuilderContext context) {
+        Class<?> fieldType = context.field.getType();
+        String defaultValCode;
+        if (fieldType == NumVal_byte.class) {
+            defaultValCode = "(byte)0";
+        } else if (fieldType == NumVal_short.class) {
+            defaultValCode = "(short)0";
+        } else if (fieldType == NumVal_int.class) {
+            defaultValCode = "0";
+        } else if (fieldType == NumVal_long.class) {
+            defaultValCode = "0L";
+        } else if (fieldType == NumVal_float.class) {
+            defaultValCode = "0F";
+        } else if (fieldType == NumVal_double.class) {
+            defaultValCode = "0D";
+        } else {
+            notSupport(context, "fieldType[{}] not support", fieldType.getName());
+            defaultValCode = null;
+        }
+        return defaultValCode;
+    }
+
+    public static Class<?> getNumFieldValType(BuilderContext context) {
+        Class<?> fieldType;
+        if (context.field.isAnnotationPresent(F_num.class)) {
+            fieldType = context.field.getType();
+        } else {
+            fieldType = context.field.getType().getComponentType();
+        }
+        Class<?> valType;
+        if (fieldType == byte.class || fieldType == short.class || fieldType == int.class
+                || fieldType == long.class || fieldType == float.class || fieldType == double.class) {
+            valType = fieldType;
+        } else if (fieldType == NumVal_byte.class) {
+            valType = byte.class;
+        } else if (fieldType == NumVal_short.class) {
+            valType = short.class;
+        } else if (fieldType == NumVal_int.class) {
+            valType = int.class;
+        } else if (fieldType == NumVal_long.class) {
+            valType = long.class;
+        } else if (fieldType == NumVal_float.class) {
+            valType = float.class;
+        } else if (fieldType == NumVal_double.class) {
+            valType = double.class;
+        } else {
+            if (fieldType.isEnum()) {
+                valType = int.class;
+            } else {
+                notSupport(context, "fieldType[{}] not support", fieldType.getName());
+                valType = null;
+            }
+        }
+        return valType;
     }
 
     public static void main(String[] args) {

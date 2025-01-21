@@ -1,4 +1,4 @@
-package cn.bcd.parser.base.anno;
+package cn.bcd.parser.base.anno.data;
 
 public enum NumType {
     uint8,

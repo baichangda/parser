@@ -1,6 +1,6 @@
 package cn.bcd.parser.base.builder;
 
-import cn.bcd.parser.base.anno.BitRemainingMode;
+import cn.bcd.parser.base.anno.data.BitRemainingMode;
 import cn.bcd.parser.base.anno.F_bit_num;
 import cn.bcd.parser.base.anno.F_bit_num_array;
 import cn.bcd.parser.base.exception.ParseException;

@@ -2,7 +2,7 @@ package cn.bcd.parser.protocol.gb32960.data;
 
 import cn.bcd.parser.base.anno.F_bean_list;
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 
 
 /**

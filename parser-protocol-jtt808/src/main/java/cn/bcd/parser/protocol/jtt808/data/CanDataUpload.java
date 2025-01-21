@@ -3,7 +3,7 @@ package cn.bcd.parser.protocol.jtt808.data;
 import cn.bcd.parser.base.anno.F_bean_list;
 import cn.bcd.parser.base.anno.F_num;
 import cn.bcd.parser.base.anno.F_num_array;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 
 public class CanDataUpload implements PacketBody {
     //数据项个数

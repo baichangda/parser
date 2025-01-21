@@ -2,6 +2,7 @@ package cn.bcd.parser.protocol.immotors;
 
 
 import cn.bcd.parser.base.anno.*;
+import cn.bcd.parser.base.anno.data.NumType;
 
 public class Evt_0004 extends Evt_2_6 {
     @F_num(type = NumType.uint16,  valExpr = "x*0.1-500")

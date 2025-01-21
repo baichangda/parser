@@ -1,7 +1,7 @@
 package cn.bcd.parser.protocol.immotors;
 
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 import com.fasterxml.jackson.annotation.JsonTypeInfo;
 
 @JsonTypeInfo(use = JsonTypeInfo.Id.CLASS)

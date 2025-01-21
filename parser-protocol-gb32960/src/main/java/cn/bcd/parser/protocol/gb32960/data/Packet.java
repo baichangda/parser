@@ -2,6 +2,8 @@ package cn.bcd.parser.protocol.gb32960.data;
 
 import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.anno.*;
+import cn.bcd.parser.base.anno.data.NumType;
+import cn.bcd.parser.base.anno.data.NumVal_byte;
 import cn.bcd.parser.base.processor.Processor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.Unpooled;
@@ -22,7 +24,7 @@ public class Packet {
     public String vin;
     //数据单元加密方式 21-22
     @F_num(type = NumType.uint8)
-    public short encodeWay;
+    public NumVal_byte encodeWay;
     //数据单元长度 22-24
     @F_num(type = NumType.uint16, globalVar = 'A')
     public int contentLength;

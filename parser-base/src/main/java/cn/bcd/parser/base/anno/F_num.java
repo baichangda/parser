@@ -1,5 +1,7 @@
 package cn.bcd.parser.base.anno;
 
+import cn.bcd.parser.base.anno.data.*;
+
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
 import java.lang.annotation.RetentionPolicy;
@@ -7,16 +9,23 @@ import java.lang.annotation.Target;
 
 /**
  * 用于原始数据是常规的数字的数据类型、见{@link NumType}
- *
+ * <p>
  * 适用如下字段类型
  * byte、short、int、long、float、double、枚举类
+ * 还有如下基础类型包装类、用于对原始值需要进行无效异常判断、然后再进行偏移量倍率处理
+ * {@link NumVal_byte}
+ * {@link NumVal_short}
+ * {@link NumVal_int}
+ * {@link NumVal_long}
+ * {@link NumVal_float}
+ * {@link NumVal_double}
  * <p>
  * 枚举类
  * 仅支持整型数字
  * 要求枚举类必有如下静态方法、例如
  * public enum Example{
- *     public static Example fromInteger(int i){}
- *     public int toInteger(){}
+ * public static Example fromInteger(int i){}
+ * public int toInteger(){}
  * }
  */
 @Target({ElementType.FIELD})

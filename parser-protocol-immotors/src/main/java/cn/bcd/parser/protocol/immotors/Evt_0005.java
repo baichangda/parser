@@ -3,7 +3,7 @@ package cn.bcd.parser.protocol.immotors;
 
 import cn.bcd.parser.base.anno.F_bit_num;
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 
 public class Evt_0005 extends Evt_2_6 {
     @F_bit_num(len = 28, unsigned = false, valExpr = "x*0.000001")

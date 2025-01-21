@@ -2,6 +2,8 @@ package cn.bcd.parser.protocol.gb32960.data;
 
 
 import cn.bcd.parser.base.anno.*;
+import cn.bcd.parser.base.anno.data.NumType;
+import cn.bcd.parser.base.anno.data.NumVal_byte;
 
 import java.util.Date;
 
@@ -25,5 +27,5 @@ public class PlatformLoginData implements PacketData {
 
     //加密规则
     @F_num(type = NumType.uint8)
-    public short encode;
+    public NumVal_byte encode;
 }

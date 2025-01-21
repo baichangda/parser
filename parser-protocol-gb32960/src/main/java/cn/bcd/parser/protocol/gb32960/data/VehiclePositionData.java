@@ -1,7 +1,7 @@
 package cn.bcd.parser.protocol.gb32960.data;
 
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 
 /**
  * 车辆位置数据

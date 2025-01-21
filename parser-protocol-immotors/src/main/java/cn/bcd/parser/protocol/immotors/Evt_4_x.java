@@ -2,7 +2,7 @@ package cn.bcd.parser.protocol.immotors;
 
 import cn.bcd.parser.base.anno.C_skip;
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 
 @C_skip(lenExpr = "4+z")
 public class Evt_4_x extends Evt {

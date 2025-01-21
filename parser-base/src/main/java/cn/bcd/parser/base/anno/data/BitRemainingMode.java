@@ -1,4 +1,7 @@
-package cn.bcd.parser.base.anno;
+package cn.bcd.parser.base.anno.data;
+
+import cn.bcd.parser.base.anno.F_bit_num;
+import cn.bcd.parser.base.anno.F_bit_num_array;
 
 public enum BitRemainingMode {
     /**

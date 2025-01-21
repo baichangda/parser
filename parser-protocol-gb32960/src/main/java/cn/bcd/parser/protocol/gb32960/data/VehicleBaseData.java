@@ -1,7 +1,7 @@
 package cn.bcd.parser.protocol.gb32960.data;
 
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.*;
 
 /**
  * 整车数据
@@ -9,39 +9,39 @@ import cn.bcd.parser.base.anno.NumType;
 public class VehicleBaseData {
     //车辆状态
     @F_num(type = NumType.uint8)
-    public short vehicleStatus;
+    public NumVal_byte vehicleStatus;
 
     //充电状态
     @F_num(type = NumType.uint8)
-    public short chargeStatus;
+    public NumVal_byte chargeStatus;
 
     //运行模式
     @F_num(type = NumType.uint8)
-    public short runMode;
+    public NumVal_byte runMode;
 
     //车速
     @F_num(type = NumType.uint16, valExpr = "x/10")
-    public float vehicleSpeed;
+    public NumVal_float vehicleSpeed;
 
     //累计里程
     @F_num(type = NumType.uint32, valExpr = "x/10")
-    public double totalMileage;
+    public NumVal_double totalMileage;
 
     //总电压
     @F_num(type = NumType.uint16, valExpr = "x/10")
-    public float totalVoltage;
+    public NumVal_float totalVoltage;
 
     //总电流
     @F_num(type = NumType.uint16, valExpr = "x/10-1000")
-    public float totalCurrent;
+    public NumVal_float totalCurrent;
 
     //soc
     @F_num(type = NumType.uint8)
-    public short soc;
+    public NumVal_byte soc;
 
     //DC-DC状态
     @F_num(type = NumType.uint8)
-    public short dcStatus;
+    public NumVal_byte dcStatus;
 
     //档位
     @F_num(type = NumType.uint8)
@@ -49,13 +49,13 @@ public class VehicleBaseData {
 
     //绝缘电阻
     @F_num(type = NumType.uint16)
-    public int resistance;
+    public NumVal_int resistance;
 
     //加速踏板行程值
     @F_num(type = NumType.uint8)
-    public short pedalVal;
+    public NumVal_byte pedalVal;
 
     //制动踏板状态
     @F_num(type = NumType.uint8)
-    public short pedalStatus;
+    public NumVal_byte pedalStatus;
 }

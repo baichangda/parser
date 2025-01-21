@@ -10,4 +10,5 @@ module parser.base {
     exports cn.bcd.parser.base.exception;
     exports cn.bcd.parser.base.processor;
     exports cn.bcd.parser.base.util;
+    exports cn.bcd.parser.base.anno.data;
 }

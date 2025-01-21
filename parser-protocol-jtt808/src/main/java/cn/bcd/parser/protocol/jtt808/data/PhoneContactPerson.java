@@ -2,7 +2,7 @@ package cn.bcd.parser.protocol.jtt808.data;
 
 import cn.bcd.parser.base.anno.F_num;
 import cn.bcd.parser.base.anno.F_string;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 
 public class PhoneContactPerson {
     //标志

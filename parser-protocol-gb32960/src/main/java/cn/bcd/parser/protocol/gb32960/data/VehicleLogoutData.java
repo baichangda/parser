@@ -4,7 +4,8 @@ import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.anno.C_impl;
 import cn.bcd.parser.base.anno.F_date_bytes_6;
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
+import cn.bcd.parser.base.anno.data.NumVal_byte;
 import cn.bcd.parser.base.processor.Processor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -30,7 +31,7 @@ public class VehicleLogoutData implements PacketData {
         packet.flag = PacketFlag.vehicle_logout_data;
         packet.replyFlag = 0xfe;
         packet.vin = "LSJE36096MS140495";
-        packet.encodeWay = 1;
+        packet.encodeWay = new NumVal_byte(0, (byte) 1);
         packet.contentLength = 8;
         packet.code = 0;
         packet.data = vehicleLogoutData;

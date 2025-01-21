@@ -2,7 +2,7 @@ package cn.bcd.parser.protocol.jtt808.data;
 
 import cn.bcd.parser.base.anno.F_bean_list;
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 
 public class SetTerminalParam implements PacketBody {
     //参数总数

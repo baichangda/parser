@@ -1,6 +1,6 @@
 package cn.bcd.parser.protocol.immotors;
 
-import cn.bcd.parser.base.anno.BitRemainingMode;
+import cn.bcd.parser.base.anno.data.BitRemainingMode;
 import cn.bcd.parser.base.anno.F_bit_num;
 
 public class Evt_0007 extends Evt_2_6 {

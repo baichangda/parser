@@ -1,4 +1,6 @@
-package cn.bcd.parser.base.anno;
+package cn.bcd.parser.base.anno.data;
+
+import cn.bcd.parser.base.anno.F_string;
 
 /**
  * 说明参考{@link F_string#appendMode()}注释

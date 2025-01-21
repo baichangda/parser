@@ -1,6 +1,6 @@
-package cn.bcd.parser.base.anno;
+package cn.bcd.parser.base.anno.data;
 
-public enum BitOrder {
+public enum ByteOrder {
     /**
      * 默认值{@link #bigEndian}
      */

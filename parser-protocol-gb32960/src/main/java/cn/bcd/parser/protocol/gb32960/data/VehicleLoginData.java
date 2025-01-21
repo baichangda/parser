@@ -3,6 +3,8 @@ package cn.bcd.parser.protocol.gb32960.data;
 
 import cn.bcd.parser.base.Parser;
 import cn.bcd.parser.base.anno.*;
+import cn.bcd.parser.base.anno.data.NumType;
+import cn.bcd.parser.base.anno.data.NumVal_byte;
 import cn.bcd.parser.base.processor.Processor;
 import io.netty.buffer.ByteBuf;
 import io.netty.buffer.ByteBufUtil;
@@ -46,7 +48,7 @@ public class VehicleLoginData implements PacketData {
         packet.flag = PacketFlag.vehicle_login_data;
         packet.replyFlag = 0xfe;
         packet.vin = "LSJE36096MS140495";
-        packet.encodeWay = 1;
+        packet.encodeWay = new NumVal_byte(0, (byte) 1);
         packet.contentLength = 30;
         packet.code = 0;
         packet.data = vehicleLoginData;

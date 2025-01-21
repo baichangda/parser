@@ -1,7 +1,7 @@
 package cn.bcd.parser.protocol.jtt808.data;
 
 import cn.bcd.parser.base.anno.F_num;
-import cn.bcd.parser.base.anno.NumType;
+import cn.bcd.parser.base.anno.data.NumType;
 import cn.bcd.parser.base.builder.FieldBuilder__F_date_bytes_6;
 import cn.bcd.parser.base.builder.FieldBuilder__F_string;
 import cn.bcd.parser.base.builder.FieldBuilder__F_string_bcd;
