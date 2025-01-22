@@ -1,7 +1,6 @@
 package cn.bcd.parser.base.anno;
 
-import cn.bcd.parser.base.anno.data.ByteOrder;
-import cn.bcd.parser.base.anno.data.NumType;
+import cn.bcd.parser.base.anno.data.*;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -13,6 +12,15 @@ import java.lang.annotation.Target;
  *
  * 适用如下字段类型
  * byte[]、short[]、int[]、long[]、float[]、double[]、enum[]
+ * 还有如下基础类型包装类、用于对原始值需要进行无效异常判断、然后再进行偏移量倍率处理
+ * {@link NumVal_byte}
+ * {@link NumVal_short}
+ * {@link NumVal_int}
+ * {@link NumVal_long}
+ * {@link NumVal_float}
+ * {@link NumVal_double}
+ * <p>
+ *
  * 数组长度=总字节数/singleLen
  * {@link #len()}和{@link #lenExpr()} 二选一、代表字段数组长度
  * <p>
