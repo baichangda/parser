@@ -826,64 +826,13 @@ public class ParseUtil {
         return "globalVar_" + var;
     }
 
-    public static void appendNumValGetter_parse(BuilderContext context, NumType numType, String varNameRawVal, String okValCode) {
-        String varNameField = ParseUtil.getFieldVarName(context);
-        String varNameNumValType = varNameField + "_numValType";
-        String varNameNumValGetter = context.getNumValGetterVarName();
-        append(context.method_body, "final int {}={}.getType({}.{},{});\n",
-                varNameNumValType,
-                varNameNumValGetter,
-                NumType.class.getName(), numType.name(),
-                varNameRawVal);
-        Class<?> fieldType = context.field.getType();
-        String fieldName = context.field.getName();
-        String defaultValCode = getNumValDefaultValue(context);
-        append(context.method_body, """
-                        if({}==0){
-                            {}.{}=new {}(0,({})({}));
-                        }else{
-                            {}.{}=new {}({},{});
-                        }
-                        """,
-                varNameNumValType,
-                FieldBuilder.varNameInstance, fieldName, fieldType.getName(), getNumFieldValType(context).getName(), okValCode,
-                FieldBuilder.varNameInstance, fieldName, fieldType.getName(), varNameNumValType, defaultValCode);
-    }
-
-    public static String appendNumValGetter_deParse(BuilderContext context, NumType numType, String varNameVal, String okValCode) {
-        String varNameField = ParseUtil.getFieldVarName(context);
-        String varNameNumValGetter = context.getNumValGetterVarName();
-        String varNameNumValType = varNameField + "_numValType";
-        append(context.method_body, "final int {}={}.{}.type();\n",
-                varNameNumValType,
-                FieldBuilder.varNameInstance,
-                varNameField);
-        String funcSuffix = switch (numType) {
-            case uint8, int8, uint16, int16, uint24, int24, uint32, int32 -> "int";
-            case uint40, int40, uint48, int48, uint56, int56, uint64, int64 -> "long";
-            default -> null;
-        };
-        if (funcSuffix == null) {
-            notSupport(context, "numType[{}] not support", numType.name());
-        }
-
-        Class<?> numValType = getNumFieldValType(context);
-        append(context.method_body, "final {} {};\n", numValType.getName(), varNameVal);
-        append(context.method_body, """
-                        if({}==0){
-                            {}={};
-                        }else{
-                            {}={}.getVal_{}({}.{},{});
-                        }
-                        """,
-                varNameNumValType,
-                varNameVal, okValCode,
-                varNameVal, varNameNumValGetter, funcSuffix, NumType.class.getName(), numType.name(), varNameNumValType);
-        return varNameVal;
-    }
-
     public static String getNumValDefaultValue(BuilderContext context) {
-        Class<?> fieldType = context.field.getType();
+        Class<?> fieldType;
+        if (context.field.isAnnotationPresent(F_num.class)) {
+            fieldType = context.field.getType();
+        } else {
+            fieldType = context.field.getType().getComponentType();
+        }
         String defaultValCode;
         if (fieldType == NumVal_byte.class) {
             defaultValCode = "(byte)0";

@@ -36,5 +36,5 @@ public class StorageVoltageData {
 
     //单体电池电压
     @F_num_array(singleType = NumType.uint16, lenExpr = "m", singleValExpr = "x/1000")
-    public float[] singleVoltage;
+    public NumVal_float[] singleVoltage;
 }

@@ -380,52 +380,8 @@ public class FieldBuilder__F_num extends FieldBuilder {
                 valCode = ParseUtil.replaceValExprToCode(RpnUtil.reverseExpr(anno.valExpr()), valCode);
             }
         }
-
         final NumType type = anno.type();
-        switch (type) {
-            case uint8, int8 -> {
-                String funcName = "writeByte";
-                ParseUtil.append(body, "{}.{}((int)({}));\n", varNameByteBuf, funcName, valCode);
-            }
-            case uint16, int16 -> {
-                String funcName = "writeShort" + (bigEndian ? "" : "LE");
-                ParseUtil.append(body, "{}.{}((int)({}));\n", varNameByteBuf, funcName, valCode);
-            }
-            case uint24, int24 -> {
-                String funcName = "writeMedium" + (bigEndian ? "" : "LE");
-                ParseUtil.append(body, "{}.{}((int)({}));\n", varNameByteBuf, funcName, valCode);
-            }
-            case uint32, int32 -> {
-                String funcName = "writeInt" + (bigEndian ? "" : "LE");
-                ParseUtil.append(body, "{}.{}((int)({}));\n", varNameByteBuf, funcName, valCode);
-            }
-            case uint40, int40 -> {
-                String funcName = "write_int40" + (bigEndian ? "" : "_le");
-                ParseUtil.append(body, "{}.{}({},(long)({}));\n", FieldBuilder__F_num.class.getName(), funcName, varNameByteBuf, valCode);
-            }
-            case uint48, int48 -> {
-                String funcName = "write_int48" + (bigEndian ? "" : "_le");
-                ParseUtil.append(body, "{}.{}({},(long)({}));\n", FieldBuilder__F_num.class.getName(), funcName, varNameByteBuf, valCode);
-            }
-            case uint56, int56 -> {
-                String funcName = "write_int56" + (bigEndian ? "" : "_le");
-                ParseUtil.append(body, "{}.{}({},(long)({}));\n", FieldBuilder__F_num.class.getName(), funcName, varNameByteBuf, valCode);
-            }
-            case uint64, int64 -> {
-                String funcName = "writeLong" + (bigEndian ? "" : "LE");
-                ParseUtil.append(body, "{}.{}((long)({}));\n", varNameByteBuf, funcName, valCode);
-            }
-            case float32 -> {
-                String funcName = "writeFloat" + (bigEndian ? "" : "LE");
-                ParseUtil.append(body, "{}.{}((float)({}));\n", varNameByteBuf, funcName, valCode);
-            }
-            case float64 -> {
-                String funcName = "writeDouble" + (bigEndian ? "" : "LE");
-                ParseUtil.append(body, "{}.{}((double)({}));\n", varNameByteBuf, funcName, valCode);
-            }
-            default -> {
-            }
-        }
+        ParseUtil.append(body,getWriteCode(type, bigEndian,valCode));
     }
 
     public boolean buildDeParse_numVal(BuilderContext context) {
@@ -438,7 +394,6 @@ public class FieldBuilder__F_num extends FieldBuilder {
         final String fieldName = field.getName();
         final String varNameField = ParseUtil.getFieldVarName(context);
         final Class<?> fieldTypeClass = field.getType();
-        final String fieldTypeName = fieldTypeClass.getName();
 
         final char var = anno.var();
         final char globalVar = anno.globalVar();
@@ -452,7 +407,6 @@ public class FieldBuilder__F_num extends FieldBuilder {
 
         //获取值类型
         String varNameNumValType = varNameField + "_numValType";
-
         String rawValTypeName = ParseUtil.getNumFieldValType(context).getName();
         ParseUtil.append(body, "final int {}={}.{}.type();\n",
                 varNameNumValType, FieldBuilder.varNameInstance, fieldName);
@@ -499,13 +453,14 @@ public class FieldBuilder__F_num extends FieldBuilder {
             ParseUtil.append(body, "final {} {}=({}){};\n",
                     rawValTypeName, varNameExprVal, rawValTypeName, exprValCode);
         }
+        NumType type = anno.type();
         //写入
-        ParseUtil.append(body, getWriteCode(anno, bigEndian, varNameExprVal));
+        ParseUtil.append(body, getWriteCode(type, bigEndian, varNameExprVal));
 
         ParseUtil.append(body, "}else{\n");
 
         String varNameNumValGetter = context.getNumValGetterVarName();
-        NumType type = anno.type();
+
         String funcSuffix = switch (type) {
             case uint8, int8, uint16, int16, uint24, int24, uint32, int32 -> "int";
             case uint40, int40, uint48, int48, uint56, int56, uint64, int64 -> "long";
@@ -513,7 +468,7 @@ public class FieldBuilder__F_num extends FieldBuilder {
         };
 
         String valCode = ParseUtil.format("{}.getVal_{}({}.{},{})", varNameNumValGetter, funcSuffix, NumType.class.getName(), type.name(), varNameNumValType);
-        ParseUtil.append(body, getWriteCode(anno, bigEndian, valCode));
+        ParseUtil.append(body, getWriteCode(type, bigEndian, valCode));
 
         if (var != '0') {
             ParseUtil.append(body, "{}=({})0;\n", varNameExprVal, rawValTypeName);
@@ -528,8 +483,7 @@ public class FieldBuilder__F_num extends FieldBuilder {
         return true;
     }
 
-    private String getWriteCode(F_num anno, boolean bigEndian, String valCode) {
-        final NumType type = anno.type();
+    public static String getWriteCode(NumType type, boolean bigEndian, String valCode) {
         switch (type) {
             case uint8, int8 -> {
                 String funcName = "writeByte";
